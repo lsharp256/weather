@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+</head>
+<div class="container pt-4">
+    <div class="col-md-12">
+        <br>
+        <h1 style="border-bottom: 5px solid black;">Hi {{ user.username }}! Here is the 7 day weather forecast:</h1>
+        {% for forecast in weather_data %}
+        <h1>Date: {{ forecast.date }}</h1>
+        <h2>High: {{ forecast.high_temp }} C</h2>
+        <h2>Low: {{ forecast.min_temp }} C</h2>
+        <h2>Wind Speed: {{ forecast.wind_speed }}Km/h</h2>
+        <h2>Rainfall: {{ forecast.rain }}</h2>
+        </br>
+        </br>
+
+        {% endfor %}
+        {% if is_paginated %}
+
+        {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'%}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+
+        {% endif %}
+        </br>
+        </body>
+    </div>
+</div>
+</html>
+{% endblock %}
